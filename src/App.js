@@ -1,7 +1,10 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react'
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import logo from './logo.svg'
 import './App.css';
 import Login from './pages/Login/index'
+
+const Index = () => <h2>Home</h2>
 
 class App extends Component {
   render() {
@@ -20,10 +23,17 @@ class App extends Component {
           >
             Learn React
           </a>
-          <Login />
         </header>
+        <Router>
+          <div>
+            <Link to="/">Home</Link>
+            <Link to="/login/">Login</Link>
+            <Route path="/" exact component={Index} />
+            <Route path="/login/" component={Login} />
+          </div>
+        </Router>
       </div>
-    );
+    )
   }
 }
 
