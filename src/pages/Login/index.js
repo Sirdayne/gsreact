@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios'
+import Auth from '../../services/Auth'
+
+const endpoint = 'https://api-dev-globalspeller.azurewebsites.net/'
 
 class Login extends Component {
   constructor(props) {
@@ -16,8 +19,14 @@ class Login extends Component {
   }
   signIn(e) {
     e.preventDefault()
-    const endpoint = 'new/endpoint'
-    axios.post(endpoint, this.state)
+    const url = endpoint + 'auth'
+    axios.post(url, this.state).then(res => {
+      if (res && res.data && res.data.token) {
+        Auth.saveToken(res.data.token, this.state.longToken)
+      }
+    }).catch(err => {
+      console.log(err)
+    })
   }
   onChangeEmail(e) {
     this.setState({ email: e.target.value })

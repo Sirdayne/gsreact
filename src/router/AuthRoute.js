@@ -1,14 +1,14 @@
 import {Redirect, Route} from "react-router-dom";
 import React from "react";
+import Auth from '../services/Auth';
 
-const isAuth = false
 const REDIRECT_PAGE = "/login"
 
 function AuthRoute({ component: Component, ...rest }) {
   return (
     <Route
       {...rest}
-      render={props => isAuth ? (
+      render={props => Auth.isLogged() ? (
         <Component {...props} />
       ) : (
         <Redirect
