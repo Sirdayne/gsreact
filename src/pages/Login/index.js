@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 import Auth from '../../services/Auth'
+import { Redirect } from 'react-router-dom'
 
 const endpoint = 'https://api-dev-globalspeller.azurewebsites.net/'
 
@@ -8,9 +9,12 @@ class Login extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      form: {
         email: '',
         password:  '',
         longToken: false
+      },
+      redirect: false
     }
     this.signIn = this.signIn.bind(this)
     this.onChangeEmail = this.onChangeEmail.bind(this)
@@ -20,32 +24,54 @@ class Login extends Component {
   signIn(e) {
     e.preventDefault()
     const url = endpoint + 'auth'
-    axios.post(url, this.state).then(res => {
+    axios.post(url, this.state.form).then(res => {
       if (res && res.data && res.data.token) {
-        Auth.saveToken(res.data.token, this.state.longToken)
+        Auth.saveToken(res.data.token, this.state.form.longToken)
+        this.setState({ redirect: true })
       }
     }).catch(err => {
       console.log(err)
     })
   }
   onChangeEmail(e) {
-    this.setState({ email: e.target.value })
+    const value = e.target.value
+    this.setState(prevState => ({
+      form: {
+        ...prevState.form,
+        email: value
+      }
+    }))
   }
   onChangePassword(e) {
-    this.setState({ password: e.target.value })
+    const value = e.target.value
+    this.setState(prevState => ({
+      form: {
+        ...prevState.form,
+        password: value
+      }
+    }))
   }
   onChangeLong(e) {
-    this.setState({ longToken: e.target.checked })
+    const value = e.target.checked
+    this.setState(prevState => ({
+      form: {
+        ...prevState.form,
+        longToken: value
+      }
+    }))
   }
   render() {
-    return (
-      <div className="login">
-          <input type="email" value={this.state.email} onChange={this.onChangeEmail}/>
-          <input type="password" value={this.state.password} onChange={this.onChangePassword}/>
-          <input type="checkbox" value={this.state.longToken} onChange={this.onChangeLong}/>
-          <button onClick={this.signIn}>Sign in</button>
-      </div>
-    )
+    if (this.state.redirect)
+      return <Redirect to="/" />
+    else
+      return (
+        <div className="login">
+            <input type="email" value={this.state.form.email} onChange={this.onChangeEmail}/>
+            <input type="password" value={this.state.form.password} onChange={this.onChangePassword}/>
+            <input type="checkbox" value={this.state.form.longToken} onChange={this.onChangeLong}/>
+            <button onClick={this.signIn}>Sign in</button>
+        </div>
+      )
   }
 }
 
