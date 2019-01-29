@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios'
 import Auth from '../../services/Auth'
 import { Redirect } from 'react-router-dom'
-
-const endpoint = 'https://api-dev-globalspeller.azurewebsites.net/'
+import BASE_URL from '../../services/BASE_URL'
 
 class Login extends Component {
   constructor(props) {
@@ -23,10 +22,10 @@ class Login extends Component {
   }
   signIn(e) {
     e.preventDefault()
-    const url = endpoint + 'auth'
-    axios.post(url, this.state.form).then(res => {
+    const endpoint = BASE_URL + 'auth'
+    axios.post(endpoint, this.state.form).then(res => {
       if (res && res.data && res.data.token) {
-        Auth.saveToken(res.data.token, this.state.form.longToken)
+        Auth.login(res.data.token, this.state.form.longToken)
         this.setState({ redirect: true })
       }
     }).catch(err => {

@@ -1,6 +1,12 @@
+import http from './api_token'
+
 export default {
   isLogged() {
     return !!this.getCookie('gstoken')
+  },
+  login(token, longToken = false) {
+    this.saveToken(token, longToken)
+    this.fetchData()
   },
   saveToken(token, longToken = false) {
     const day = 24 * 60 * 60 * 1000
@@ -8,13 +14,26 @@ export default {
     const date = longToken ? new Date(new Date().getTime() + numDays * day).toUTCString() : new Date(new Date().getTime() + day).toUTCString()
     document.cookie = `gstoken=Bearer ${token}; path=/; expires=${date};`
   },
-  getTenant(data) {
+  fetchData() {
+    this.fetchClinics()
+  },
+  fetchClinics() {
+    http.get('clinics').then(res => {
+      if (res && res.data) {
+        this.setTenant(res.data)
+      }
+    }).catch(err => {
+      this.logout()
+      console.log(err)
+    })
+  },
+  setTenant(data) {
+    localStorage.setItem('tenant', data[0].id)
+  },
+  getTenant() {
     const localTenant = localStorage.getItem('tenant')
     const tenant = parseInt(localTenant)
-    if (tenant) {
-    } else {
-      localStorage.setItem('tenant', data[0].id)
-    }
+    return tenant
   },
   getToken() {
     let token = this.getCookie('gstoken')
@@ -36,5 +55,6 @@ export default {
   },
   logout() {
     this.forgetUser()
+    localStorage.clear()
   }
 }
