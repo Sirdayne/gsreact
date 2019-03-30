@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import Auth from '../services/Auth'
 import { Redirect } from 'react-router-dom'
+import Button from '@material-ui/core/Button'
 
 class Logout extends Component {
   constructor(props) {
@@ -20,9 +21,9 @@ class Logout extends Component {
       return <Redirect to="/login" />
     else
       return (
-        <button onClick={this.logout}>
-          Log out
-        </button>
+        <Button variant="contained" color="primary" onClick={this.logout}>
+          Logout
+        </Button>
       )
   }
 }

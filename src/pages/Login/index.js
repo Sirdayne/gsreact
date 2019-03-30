@@ -3,6 +3,10 @@ import axios from 'axios'
 import Auth from '../../services/Auth'
 import { Redirect } from 'react-router-dom'
 import BASE_URL from '../../services/BASE_URL'
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
+import Checkbox from '@material-ui/core/Checkbox'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 
 class Login extends Component {
   constructor(props) {
@@ -65,10 +69,16 @@ class Login extends Component {
     else
       return (
         <div className="login">
-            <input type="email" value={this.state.form.email} onChange={this.onChangeEmail}/>
-            <input type="password" value={this.state.form.password} onChange={this.onChangePassword}/>
-            <input type="checkbox" value={this.state.form.longToken} onChange={this.onChangeLong}/>
-            <button onClick={this.signIn}>Sign in</button>
+            <TextField type="email" label="Email" value={this.state.form.email} onChange={this.onChangeEmail}/>
+            <TextField type="password" label="Password" value={this.state.form.password} onChange={this.onChangePassword}/>
+            <FormControlLabel
+              control = {
+                <Checkbox checked={this.state.form.longToken} onChange={this.onChangeLong}/>
+              }
+              label="Remember me?"
+            >
+            </FormControlLabel>
+            <Button variant="contained" color="primary" onClick={this.signIn}>Sign in</Button>
         </div>
       )
   }

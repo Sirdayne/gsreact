@@ -35,3 +35,11 @@
     transform: rotate(360deg);
   }
 }
+
+.login {
+  margin: 20px auto 0;
+  background: #fff;
+  box-sizing: border-box;
+  padding: 25px;
+  width: 280px;
+}
