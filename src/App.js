@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import logo from './logo.svg'
 import './App.css'
+import './main.sass'
 import Router from './router'
 
 class App extends Component {
