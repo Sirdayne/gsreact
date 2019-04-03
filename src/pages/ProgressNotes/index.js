@@ -2,12 +2,7 @@ import React, { Component } from 'react'
 import http from '../../services/http'
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
-
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import NotesTable from './NotesTable'
 
 class ProgressNotes extends Component {
   constructor(props) {
@@ -56,7 +51,6 @@ class ProgressNotes extends Component {
     http.get(endpoint).then(res => {
       if (res && res.data && res.data.length > 0) {
         this.setState({ progressNotes: res.data })
-        console.log(this.state.progressNotes)
       }
     }).catch(err => {
       console.log(err)
@@ -78,26 +72,7 @@ class ProgressNotes extends Component {
             }
           </Select> : "No patients"
         }
-        { this.state.progressNotes.length > 0 ?
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Text</TableCell>
-                <TableCell>Created</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.state.progressNotes.map(row => (
-                <TableRow key={row.id}>
-                  <TableCell>{row.id}</TableCell>
-                  <TableCell>{row.noteView.note}</TableCell>
-                  <TableCell>{row.created}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table> : 'No progress-notes'
-        }
+        <NotesTable items={this.state.progressNotes}/>
       </div>
     )
   }
